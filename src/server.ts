@@ -5,18 +5,18 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const fastify = Fastify();
+const app = Fastify();
 
 
 // Registra o CORS
-fastify.register(cors);
+app.register(cors);
 
 // Registra as rotas
-fastify.get('/', async (req, reply) => {
+app.get('/', async (req, reply) => {
     return { message: 'API funcionando!' };
 });
 
-fastify.register(clientRoutes);
+app.register(clientRoutes);
 
 
 // Exporta como uma função para Vercel
@@ -25,12 +25,13 @@ fastify.register(clientRoutes);
     fastify.server.emit('request', req, res);
 }; */
 
+// Exporta como uma função que Vercel pode entender
 export default async (req: any, res: any) => {
   try {
     // Certifica-se de que o Fastify está pronto para processar as requisições
-    await fastify.ready();
+    await app.ready();
     // Encaminha a requisição para o servidor Fastify
-    fastify.server.emit('request', req, res);
+    app.server.emit('request', req, res);
   } catch (err) {
     // Em caso de erro, envia uma resposta diretamente
     res.statusCode = 500;
@@ -50,7 +51,7 @@ export default async (req: any, res: any) => {
 }); */
 
 // Somente inicializa o servidor se não estiver rodando no Vercel
-if (process.env.VERCEL !== '1') {
+/* if (process.env.VERCEL !== '1') {
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3333;
   fastify.listen({ port, host: '0.0.0.0' }, (err, address) => {
     if (err) {
@@ -59,4 +60,4 @@ if (process.env.VERCEL !== '1') {
     }
     console.log(`Server listening at ${address}`);
   });
-}
+} */
