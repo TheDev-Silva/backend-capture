@@ -49,3 +49,14 @@ export default async (req: any, res: any) => {
   console.log(`Server listening at ${address}`);
 }); */
 
+// Somente inicializa o servidor se não estiver rodando no Vercel
+if (process.env.VERCEL !== '1') {
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3333;
+  fastify.listen({ port, host: '0.0.0.0' }, (err, address) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    console.log(`Server listening at ${address}`);
+  });
+}
