@@ -38,7 +38,7 @@ export const createClient = async (
 
     try {
         const newClient = await prisma.captureClient.create({
-            data: { name, email, phone, message },
+            data: { name, email, phone, message,  },
         });
 
         const transporter = nodemailer.createTransport({
